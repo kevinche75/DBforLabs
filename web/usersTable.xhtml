@@ -14,39 +14,39 @@
       </h:head>
       <h:body>
          <h:form>
-            <p:outputLabel value="User:" for="acSimple" />
-            <p:autoComplete id="acSimple" value="#{modelBean.currentUser}" completeMethod="#{modelBean.completeUser}" />
-             <p:commandButton value = "show" action = "labsTable" disabled = "#{modelBean.isFalseISUid}"/>
+            <p:outputLabel value="Student:" for="acSimple" />
+            <p:autoComplete id="acSimple" value="#{modelBean.currentUser}" completeMethod="#{modelBean.completeUser}"/>
+             <p:commandButton value = "show" action = "labsTable"/>
              <p:commandButton value="add" action="addNewUser"/>
-             <h:dataTable value="#{modelBean.users}" var="user" id="resultTable">
+             <h:dataTable value="#{modelBean.students}" var="student" id="resultTable">
                  <h:column>
                      <f:facet name="header">ISU id</f:facet>
-                     <h:commandLink action="#{modelBean.toLabs(user.id)}">
-                         #{user.isuID}
+                     <h:commandLink action="#{modelBean.toLabs(student)}">
+                         #{student.isuID}
                      </h:commandLink>
                  </h:column>
                  <h:column>
                      <f:facet name="header">FirstName</f:facet>
-                     <h:commandLink action="#{modelBean.toLabs(user.id)}">
-                         #{user.firstName}
+                     <h:commandLink action="#{modelBean.toLabs(student)}">
+                         #{student.firstName}
                      </h:commandLink>
                  </h:column>
                  <h:column>
                      <f:facet name="header">LastName</f:facet>
-                     <h:commandLink action="#{modelBean.toLabs(user.id)}">
-                         #{user.lastName}
+                     <h:commandLink action="#{modelBean.toLabs(student)}">
+                         #{student.lastName}
                      </h:commandLink>
                  </h:column>
                  <h:column>
                      <f:facet name="header">PatronymicName</f:facet>
-                     <h:commandLink action="#{modelBean.toLabs(user.id)}">
-                         #{user.patronymicName}
+                     <h:commandLink action="#{modelBean.toLabs(student)}">
+                         #{student.patronymicName}
                      </h:commandLink>
                  </h:column>
                  <h:column>
                      <f:facet name="header">Labs</f:facet>
-                     <h:commandLink action="#{modelBean.toLabs(user.id)}">
-                         #{user.getSize}
+                     <h:commandLink action="#{modelBean.toLabs(student)}">
+                         #{student.numberOfLabs}
                      </h:commandLink>
                  </h:column>
              </h:dataTable>

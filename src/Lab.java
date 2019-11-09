@@ -1,4 +1,5 @@
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 
@@ -15,11 +16,21 @@ public class Lab {
     private int labScore;
 
     @Column(nullable = false)
-    private String date;
+    @Temporal(TemporalType.DATE)
+    private java.util.Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "student_id")
+    private Student student;
+
+    public Lab() {
+    }
+
+    public Lab(int labNumber, int labScore, Date date) {
+        this.labNumber = labNumber;
+        this.labScore = labScore;
+        this.date = date;
+    }
 
     public int getLabNumber() {
         return labNumber;
@@ -37,20 +48,20 @@ public class Lab {
         this.labScore = labScore;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public int getId() {

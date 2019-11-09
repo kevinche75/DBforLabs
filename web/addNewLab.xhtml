@@ -4,8 +4,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:outputLabel value="Hello, world"/>
+    <h:head>
+        <title>NewLab</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+   <h:body>
+       <h:form prependId="false">
+           <h:outputLabel value="Lab's number: " for="labNumberInput"/>
+           <h:inputText id = "labNumberInput" value="#{modelBean.labNumber}" required="true" validatorMessage="The lab's number id is beatween 100000 and 999999" requiredMessage="You had to write a number">
+               <f:validateLongRange minimum="1" maximum="8"/>
+           </h:inputText>
+           <br/>
+           <h:message for="labNumberInput" style="color:red"/>
+           <br/>
+           <h:outputLabel value="Lab's score: " for="labScoreInput"/>
+           <h:inputText id = "labScoreInput" value="#{modelBean.labScore}" required="true" validatorMessage="The lab's score id is beatween 0 and 10" requiredMessage="You had to write a score">
+               <f:validateLongRange minimum="0" maximum="10"/>
+           </h:inputText>
+           <br/>
+           <h:message for="labScoreInput" style="color:red"/>
+           <br/>
+           <h:outputLabel for="labDateInput" value="Date:" />
+           <p:calendar id="labDateInput" value="#{modelBean.labDate}" mode="inline" required="true" requiredMessage="You had to chose a date"/>
+           <br/>
+           <h:message for="labDateInput" style="color:red"/>
+           <br/>
+           <h:outputLabel for="labDateInput" value="File: "/>
+           <h:inputFile id="labFileInput" value="#{modelBean.labFile}" required="true" requiredMessage="You had to chose a file with lab"/>
+           <p:commandButton/>
+       </h:form>
+   </h:body>
 </f:view>
 </html>

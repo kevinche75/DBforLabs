@@ -1,13 +1,15 @@
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table
 
-public class User {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
     private int id;
 
     @Column(nullable = false)
@@ -22,17 +24,47 @@ public class User {
     @Column(nullable = false, unique = true)
     private Integer isuID;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
+    private int numberOfLabs;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Lab> labs;
 
-    public User() {
+    public Student() {
     }
 
-    public User(String firstName, String lastName, Integer isuID, List<Lab> labs) {
+    public Student(String firstName, String lastName, String patronymicName, Integer isuID) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymicName = patronymicName;
+        this.isuID = isuID;
+        labs = new ArrayList<>();
+        numberOfLabs = 0;
+    }
+
+    public Student(String firstName, String lastName, Integer isuID, List<Lab> labs) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.isuID = isuID;
         this.labs = labs;
+        numberOfLabs = labs.size();
+    }
+
+    public Student(String firstName, String lastName, String patronymicName, Integer isuID, int numberOfLabs, List<Lab> labs) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymicName = patronymicName;
+        this.isuID = isuID;
+        this.numberOfLabs = numberOfLabs;
+        this.labs = labs;
+    }
+
+    public int getNumberOfLabs() {
+        return numberOfLabs;
+    }
+
+    public void setNumberOfLabs(int numberOfLabs) {
+        this.numberOfLabs = numberOfLabs;
     }
 
     public String getFirstName() {
@@ -77,9 +109,5 @@ public class User {
 
     public void setPatronymicName(String patronymicName) {
         this.patronymicName = patronymicName;
-    }
-
-    public int getSize(){
-        return labs.size();
     }
 }

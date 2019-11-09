@@ -2,7 +2,9 @@ import org.hibernate.Session;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.servlet.http.Part;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "modelBean", eager = true)
@@ -10,36 +12,74 @@ import java.util.List;
 
 public class ModelBean {
 
-    private int currentUser;
-    private List<User> users;
-    private boolean isFalseISUid = true;
+    private Student currentUser;
+    private List<Student> students;
+
     private int isuID;
     private String firstName;
     private String lastName;
     private String patronymicName;
 
-    public String addUser(){
-        return "usersTable?faces-redirect=true";
+    private int labNumber;
+    private double labScore;
+    private Part labFile;
+    private Date labDate;
+
+    public void addStudent(){
+        Student student = new Student(firstName,lastName,patronymicName, isuID);
+        DAO.addStudent(student);
+    }
+
+    public void addLab(){
+        Lab lab = new Lab();
+        //Todo
     }
 
     public List<Integer> completeUser(String completeUser){
         List<Integer> list = new ArrayList<>();
-        for(int i=0; i<users.size(); i++){
-            User user = users.get(i);
-            if(Integer.toString(user.getIsuID()).startsWith(completeUser)){
-                list.add(user.getIsuID());
-                isFalseISUid = false;
+        for (Student student : students) {
+            if (Integer.toString(student.getIsuID()).startsWith(completeUser)) {
+                list.add(student.getIsuID());
             }
-        }
-        if(list.size()==0){
-            isFalseISUid = true;
         }
         return list;
     }
 
-    public String toLabs(int id){
-        currentUser = id;
+    public String toLabs(Student student){
+        currentUser = student;
         return "labsTable?faces-redirect=true";
+    }
+
+    public int getLabNumber() {
+        return labNumber;
+    }
+
+    public void setLabNumber(int labNumber) {
+        this.labNumber = labNumber;
+    }
+
+    public double getLabScore() {
+        return labScore;
+    }
+
+    public void setLabScore(double labScore) {
+        this.labScore = labScore;
+    }
+
+    public Part getLabFile() {
+        return labFile;
+    }
+
+    public void setLabFile(Part labFile) {
+        this.labFile = labFile;
+    }
+
+    public Date getLabDate() {
+        return labDate;
+    }
+
+    public void setLabDate(Date labDate) {
+        this.labDate = labDate;
     }
 
     public int getIsuID() {
@@ -74,35 +114,20 @@ public class ModelBean {
         this.patronymicName = patronymicName;
     }
 
-    public boolean getIsFalseISUid() {
-        return isFalseISUid;
-    }
-
-    public void setIsFalseISUid(boolean falseISUid) {
-        isFalseISUid = falseISUid;
-    }
-
-    public int getCurrentUser() {
+    public Student getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(int currentUser) {
+    public void setCurrentUser(Student currentUser) {
         this.currentUser = currentUser;
     }
 
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            session.beginTransaction();
-            users =  (List<User>)session.createQuery("From User").list();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        this.users = users;
-        return users;
+    public List<Student> getStudents() {
+        students = DAO.getAllStudents();
+        return students;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }
