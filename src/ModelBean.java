@@ -1,10 +1,17 @@
 import org.hibernate.Session;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.UploadedFile;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,14 +35,48 @@ public class ModelBean {
     private Part labFile;
     private Date labDate;
 
-    public void addStudent(){
-        Student student = new Student(firstName,lastName,patronymicName, isuID);
-        DAO.addStudent(student);
+    public void download(Lab lab){
+        File labFile = DAO.getLabFile(currentUser.getIsuID(), lab.getLabNumber(), lab.getLabName());
+        if(!labFile.exists()){
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "SERVER MESSAGE", "Couldn't find the file");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+            return;
+        }
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext ec = ctx.getExternalContext();
+        String fileName = labFile.getName();
+        String contentType = ec.getMimeType(fileName);
+        int contentLength = (int) labFile.length();
+
+        ec.responseReset();
+        ec.setResponseContentType(contentType);
+        ec.setResponseContentLength(contentLength);
+        ec.setResponseHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        try(OutputStream output = ec.getResponseOutputStream()){
+            Files.copy(labFile.toPath(), output);
+            ctx.responseComplete();
+        } catch (IOException e) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "SERVER MESSAGE", "Couldn't begin downloading the file");
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        }
     }
 
-    public void addLab(){
-        Lab lab = new Lab();
-        //Todo
+    public String addStudent(){
+        Student student = new Student(firstName,lastName,patronymicName, isuID);
+        return DAO.addStudent(student);
+    }
+
+    public String addLab(){
+        for(Lab lab : currentUser.getLabs()){
+            if(lab.getLabNumber()==labNumber){
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "SERVER MESSAGE", "The Student has already had such lab");
+                RequestContext.getCurrentInstance().showMessageInDialog(message);
+                return "";
+            }
+        }
+        Lab lab = new Lab(labNumber, labScore, labFile.getSubmittedFileName(), labDate);
+        return DAO.addLab(lab, currentUser, labFile);
     }
 
     public List<Integer> completeUser(String completeUser){

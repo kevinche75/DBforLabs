@@ -13,7 +13,10 @@ public class Lab {
     private int labNumber;
 
     @Column(nullable = false)
-    private int labScore;
+    private double labScore;
+
+    @Column(nullable = false)
+    private String labName;
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
@@ -26,10 +29,25 @@ public class Lab {
     public Lab() {
     }
 
-    public Lab(int labNumber, int labScore, Date date) {
+    public Lab(int labNumber, double labScore, Date date) {
         this.labNumber = labNumber;
         this.labScore = labScore;
         this.date = date;
+    }
+
+    public Lab(int labNumber, double labScore, String labName, Date date) {
+        this.labNumber = labNumber;
+        this.labScore = labScore;
+        this.labName = labName;
+        this.date = date;
+    }
+
+    public String getLabName() {
+        return labName;
+    }
+
+    public void setLabName(String labName) {
+        this.labName = labName;
     }
 
     public int getLabNumber() {
@@ -40,11 +58,11 @@ public class Lab {
         this.labNumber = labNumber;
     }
 
-    public int getLabScore() {
+    public double getLabScore() {
         return labScore;
     }
 
-    public void setLabScore(int labScore) {
+    public void setLabScore(double labScore) {
         this.labScore = labScore;
     }
 

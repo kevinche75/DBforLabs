@@ -59,6 +59,11 @@ public class Student {
         this.labs = labs;
     }
 
+    public void addLab(Lab lab){
+        lab.setStudent(this);
+        labs.add(lab);
+    }
+
     public int getNumberOfLabs() {
         return numberOfLabs;
     }

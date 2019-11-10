@@ -4,8 +4,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:outputLabel value="Hello, world"/>
+    <h:head>
+        <title>Labs</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form prependId="false">
+            <p:outputLabel value="Student: #{modelBean.currentUser.isuID}"/>
+            <br/>
+            <p:button value="add" outcome="addNewLab?faces-redirect=true"/>
+            <p:button value="back" outcome="usersTable?faces-redirect=true"/>
+            <h:dataTable value="#{modelBean.currentUser.labs}" var="lab" id="resultTable">
+                <h:column>
+                    <f:facet name="header">Number</f:facet>
+                        #{lab.labNumber}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Score</f:facet>
+                    #{lab.labScore}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    <h:outputText value="#{lab.date}">
+                        <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Download</f:facet>
+                    <p:commandButton value = "#{lab.labName}" ajax="false" icon="pi pi-arrow-down" action="#{modelBean.download(lab)}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:body>
 </f:view>
 </html>
