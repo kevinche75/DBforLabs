@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
    <h:body>
-       <h:form prependId="false">
+       <h:form prependId="false" enctype="multipart/form-data">
            <h:outputLabel value="Lab's number: " for="labNumberInput"/>
            <h:inputText id = "labNumberInput" value="#{modelBean.labNumber}" required="true" validatorMessage="The lab's number id is beatween 100000 and 999999" requiredMessage="You had to write a number">
                <f:validateLongRange minimum="1" maximum="8"/>
@@ -34,8 +34,12 @@
            <h:message for="labDateInput" style="color:red"/>
            <br/>
            <h:outputLabel for="labDateInput" value="File: "/>
-           <h:inputFile id="labFileInput" value="#{modelBean.labFile}" required="true" requiredMessage="You had to chose a file with lab"/>
-           <p:commandButton/>
+           <h:inputFile id="labFileInput" value="#{modelBean.labFile}" required="true" requiredMessage="You had to chose a file with lab" />
+           <br/>
+           <h:message for="labFileInput" style="color:red"/>
+           <br/>
+           <p:commandButton value="add" action="#{modelBean.addLab}" ajax="false"/>
+           <p:button value="back" outcome="labsTable?faces-redirect=true"/>
        </h:form>
    </h:body>
 </f:view>

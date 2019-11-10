@@ -15,9 +15,9 @@
       <h:body>
          <h:form>
             <p:outputLabel value="Student:" for="acSimple" />
-            <p:autoComplete id="acSimple" value="#{modelBean.currentUser}" completeMethod="#{modelBean.completeUser}"/>
-             <p:commandButton value = "show" action = "labsTable"/>
-             <p:commandButton value="add" action="addNewUser"/>
+            <p:autoComplete id="acSimple" value="#{modelBean.currentISUid}" completeMethod="#{modelBean.completeUser}"/>
+             <p:commandButton value = "show" action = "#{modelBean.showStudentLabs}"/>
+             <p:commandButton value="add" action="addNewUser?faces-redirect=true"/>
              <h:dataTable value="#{modelBean.students}" var="student" id="resultTable">
                  <h:column>
                      <f:facet name="header">ISU id</f:facet>

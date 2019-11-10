@@ -43,9 +43,7 @@
             <h:message for="patronymicNameInput" style="color:red"/>
             <br/>
             <p:commandButton value="add" action="#{modelBean.addStudent}"/>
-        </h:form>
-        <h:form prependId="false">
-            <p:commandButton value="back" action="usersTable"/>
+            <p:button value="back" outcome="usersTable?faces-redirect=true"/>
         </h:form>
     </h:body>
 </f:view>

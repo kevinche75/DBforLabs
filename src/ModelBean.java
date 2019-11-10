@@ -1,5 +1,7 @@
 import org.hibernate.Session;
+import org.primefaces.context.RequestContext;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.servlet.http.Part;
@@ -14,6 +16,7 @@ public class ModelBean {
 
     private Student currentUser;
     private List<Student> students;
+    private String currentISUid;
 
     private int isuID;
     private String firstName;
@@ -42,11 +45,25 @@ public class ModelBean {
                 list.add(student.getIsuID());
             }
         }
+        currentISUid = completeUser;
         return list;
+    }
+
+    public String showStudentLabs(){
+        for(Student student : students){
+            if(currentISUid.equals(student.getIsuID().toString())){
+                currentUser = student;
+                return toLabs(student);
+            }
+        }
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "SERVER MESSAGE", "Can not find such student");
+        RequestContext.getCurrentInstance().showMessageInDialog(message);
+        return "";
     }
 
     public String toLabs(Student student){
         currentUser = student;
+        System.out.println(student.getIsuID());
         return "labsTable?faces-redirect=true";
     }
 
@@ -56,6 +73,14 @@ public class ModelBean {
 
     public void setLabNumber(int labNumber) {
         this.labNumber = labNumber;
+    }
+
+    public String getCurrentISUid() {
+        return currentISUid;
+    }
+
+    public void setCurrentISUid(String currentISUid) {
+        this.currentISUid = currentISUid;
     }
 
     public double getLabScore() {
